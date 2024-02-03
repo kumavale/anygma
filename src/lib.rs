@@ -1,10 +1,10 @@
 #[macro_export]
 macro_rules! ary_t {
     ( $ty:ty ) => { [] as [$ty; 0] };
-    ( $ty:ty, $value:expr; $n:expr ) => {
+    ( $ty:ty; $value:expr; $n:expr ) => {
         [&$value as $ty; $n]
     };
-    ( $ty:ty, $( $value:expr ),+ $(,)? ) => {
+    ( $ty:ty; $( $value:expr ),+ $(,)? ) => {
         [ $(&$value as $ty),+ ]
     };
 }
@@ -13,10 +13,10 @@ macro_rules! ary_t {
 macro_rules! ary_ref {
     () => { ary_t!(&dyn std::any::Any) };
     ( $value:expr; $n:expr ) => {
-        ary_t![&dyn std::any::Any, $value; $n]
+        ary_t![&dyn std::any::Any; $value; $n]
     };
     ( $( $value:expr ),+ $(,)? ) => {
-        ary_t![&dyn std::any::Any, $($value),+]
+        ary_t![&dyn std::any::Any; $($value),+]
     };
 }
 
@@ -34,7 +34,7 @@ mod tests {
 
     macro_rules! ary_debug {
         ( $( $value:expr ),+ $(,)? ) => {
-            ary_t![&dyn std::fmt::Debug, $($value),+]
+            ary_t![&dyn std::fmt::Debug; $($value),+]
         };
     }
 
@@ -89,7 +89,7 @@ mod tests {
 
     #[test]
     fn test_ary_t() {
-        let a = ary_t![&dyn std::fmt::Debug, 0, 'a', "str", Animal::Cat];
+        let a = ary_t![&dyn std::fmt::Debug; 0, 'a', "str", Animal::Cat];
         println!("{:?}", a);
 
         let a = ary_debug![0, 'a', "str", Animal::Cat];
