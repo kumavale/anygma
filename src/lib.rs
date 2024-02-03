@@ -10,11 +10,28 @@ macro_rules! ary_ref {
 mod tests {
     use super::*;
 
+    #[derive(Debug, PartialEq)]
+    enum Animal {
+        Cat,
+    }
+
     #[test]
     fn test_ary_ref() {
         let a = ary_ref![];
         assert!(a.is_empty());
+
         let a = ary_ref![0];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
+
+        let a = ary_ref![0,1,2,];
+        assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
+        assert_eq!(a[1].downcast_ref::<i32>(), Some(&1));
+        assert_eq!(a[2].downcast_ref::<i32>(), Some(&2));
+
+        let a = ary_ref![0,'a',"str",Animal::Cat];
+        assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
+        assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
+        assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
+        assert_eq!(a[3].downcast_ref::<Animal>(), Some(&Animal::Cat));
     }
 }
