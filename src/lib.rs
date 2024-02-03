@@ -1,6 +1,6 @@
 #[macro_export]
 macro_rules! ary_t {
-    ( $ty:ty ) => { (&[]) as &[$ty] };
+    ( $ty:ty ) => { [] as [$ty; 0] };
     ( $ty:ty, $value:expr; $n:expr ) => {
         [&$value as $ty; $n]
     };
