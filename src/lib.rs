@@ -1,4 +1,15 @@
 #[macro_export]
+macro_rules! ary_t {
+    ( $ty:ty ) => { (&[]) as &[$ty] };
+    ( $ty:ty, $value:expr; $n:expr ) => {
+        &[&$value as $ty; $n]
+    };
+    ( $ty:ty, $( $value:expr ),+ $(,)? ) => {
+        &[ $(&$value as $ty),+ ]
+    };
+}
+
+#[macro_export]
 macro_rules! ary_ref {
     () => { ary_t!(&dyn std::any::Any) };
     ( $value:expr; $n:expr ) => {
@@ -14,17 +25,6 @@ macro_rules! ary_box {
     () => { ary_t!(Box<dyn std::any::Any>) };
     ( $( $value:expr ),+ $(,)? ) => {
         &[ $(Box::new($value) as Box<dyn std::any::Any>),+ ]
-    };
-}
-
-#[macro_export]
-macro_rules! ary_t {
-    ( $ty:ty ) => { (&[]) as &[$ty] };
-    ( $ty:ty, $value:expr; $n:expr ) => {
-        &[&$value as $ty; $n]
-    };
-    ( $ty:ty, $( $value:expr ),+ $(,)? ) => {
-        &[ $(&$value as $ty),+ ]
     };
 }
 
