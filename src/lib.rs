@@ -17,9 +17,22 @@ macro_rules! ary_box {
     };
 }
 
+#[macro_export]
+macro_rules! ary_t {
+    ( $ty:ty, $( $value:expr ),+ $(,)? ) => {
+        &[ $(&$value as $ty),+ ] as &[$ty]
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    macro_rules! ary_debug {
+        ( $( $value:expr ),+ $(,)? ) => {
+            ary_t![&dyn std::fmt::Debug, $($value),+]
+        };
+    }
 
     #[derive(Debug, PartialEq)]
     enum Animal {
@@ -68,5 +81,14 @@ mod tests {
         assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
         assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
         assert_eq!(a[3].downcast_ref::<Animal>(), Some(&Animal::Cat));
+    }
+
+    #[test]
+    fn test_ary_t() {
+        let a = ary_t![&dyn std::fmt::Debug, 0, 'a', "str", Animal::Cat];
+        println!("{:?}", a);
+
+        let a = ary_debug![0, 'a', "str", Animal::Cat];
+        println!("{:?}", a);
     }
 }
