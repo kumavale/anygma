@@ -23,12 +23,12 @@ mod tests {
         let a = ary_ref![0];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
 
-        let a = ary_ref![0,1,2,];
+        let a = ary_ref![0, 1, 2,];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
         assert_eq!(a[1].downcast_ref::<i32>(), Some(&1));
         assert_eq!(a[2].downcast_ref::<i32>(), Some(&2));
 
-        let a = ary_ref![0,'a',"str",Animal::Cat];
+        let a = ary_ref![0, 'a', "str", Animal::Cat];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
         assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
         assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
