@@ -95,4 +95,15 @@ mod tests {
         let a = ary_debug![0, 'a', "str", Animal::Cat];
         println!("{:?}", a);
     }
+
+    #[test]
+    fn test_nested() {
+        let a = 0;
+        let b = ary_box![a];
+        let c = ary_box![b];
+        assert_eq!(
+            c[0].downcast_ref::<[Box<dyn std::any::Any>; 1]>().unwrap()[0].downcast_ref::<i32>(),
+            Some(&0)
+        );
+    }
 }
