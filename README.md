@@ -1,6 +1,8 @@
 # anygma 🦝
 
 [![Actions Status](https://github.com/kumavale/anygma/workflows/CI/badge.svg)](https://github.com/kumavale/anygma/actions)
+[![Crates.io](https://img.shields.io/crates/v/anygma.svg)](https://crates.io/crates/anygma)
+[![Documentation](https://docs.rs/anygma/badge.svg)](https://docs.rs/anygma)
 
 `anygma` makes it easy to define arrays containing different types.
 
