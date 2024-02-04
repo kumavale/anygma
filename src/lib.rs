@@ -106,4 +106,11 @@ mod tests {
             Some(&0)
         );
     }
+
+    #[test]
+    fn test_vec_ref() {
+        let mut a = ary_ref![0, 'a', "str", Animal::Cat].to_vec();
+        a.push(&3.14);
+        assert_eq!(a[4].downcast_ref::<f64>(), Some(&3.14));
+    }
 }
