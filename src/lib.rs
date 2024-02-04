@@ -10,7 +10,7 @@ macro_rules! ary_t {
 }
 
 #[macro_export]
-macro_rules! ary_ref {
+macro_rules! ary_anyref {
     () => { ary_t!(&dyn std::any::Any) };
     ( $value:expr; $n:expr ) => {
         ary_t![&dyn std::any::Any; $value; $n]
@@ -21,7 +21,7 @@ macro_rules! ary_ref {
 }
 
 #[macro_export]
-macro_rules! ary_box {
+macro_rules! ary_anybox {
     () => { ary_t!(Box<dyn std::any::Any>) };
     ( $( $value:expr ),+ $(,)? ) => {
         [ $(Box::new($value) as Box<dyn std::any::Any>),+ ]
@@ -44,23 +44,23 @@ mod tests {
     }
 
     #[test]
-    fn test_ary_ref() {
-        let a = ary_ref![];
+    fn test_ary_anyref() {
+        let a = ary_anyref![];
         assert!(a.is_empty());
 
-        let a = ary_ref![0; 42];
+        let a = ary_anyref![0; 42];
         assert_eq!(a.len(), 42);
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
 
-        let a = ary_ref![0];
+        let a = ary_anyref![0];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
 
-        let a = ary_ref![0, 1, 2,];
+        let a = ary_anyref![0, 1, 2,];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
         assert_eq!(a[1].downcast_ref::<i32>(), Some(&1));
         assert_eq!(a[2].downcast_ref::<i32>(), Some(&2));
 
-        let a = ary_ref![0, 'a', "str", Animal::Cat];
+        let a = ary_anyref![0, 'a', "str", Animal::Cat];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
         assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
         assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
@@ -68,19 +68,19 @@ mod tests {
     }
 
     #[test]
-    fn test_ary_box() {
-        let a = ary_box![];
+    fn test_ary_anybox() {
+        let a = ary_anybox![];
         assert!(a.is_empty());
 
-        let a = ary_box![0];
+        let a = ary_anybox![0];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
 
-        let a = ary_box![0, 1, 2,];
+        let a = ary_anybox![0, 1, 2,];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
         assert_eq!(a[1].downcast_ref::<i32>(), Some(&1));
         assert_eq!(a[2].downcast_ref::<i32>(), Some(&2));
 
-        let a = ary_box![0, 'a', "str", Animal::Cat];
+        let a = ary_anybox![0, 'a', "str", Animal::Cat];
         assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
         assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
         assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
@@ -99,8 +99,8 @@ mod tests {
     #[test]
     fn test_nested() {
         let a = 0;
-        let b = ary_box![a];
-        let c = ary_box![b];
+        let b = ary_anybox![a];
+        let c = ary_anybox![b];
         assert_eq!(
             c[0].downcast_ref::<[Box<dyn std::any::Any>; 1]>().unwrap()[0].downcast_ref::<i32>(),
             Some(&0)
@@ -109,7 +109,7 @@ mod tests {
 
     #[test]
     fn test_vec_ref() {
-        let mut a = ary_ref![0, 'a', "str", Animal::Cat].to_vec();
+        let mut a = ary_anyref![0, 'a', "str", Animal::Cat].to_vec();
         a.push(&3.14);
         assert_eq!(a[4].downcast_ref::<f64>(), Some(&3.14));
     }
