@@ -11,18 +11,18 @@ macro_rules! ary_t {
 
 #[macro_export]
 macro_rules! ary_anyref {
-    () => { ary_t!(&dyn std::any::Any) };
+    () => { [] as [&dyn std::any::Any; 0] };
     ( $value:expr; $n:expr ) => {
-        ary_t![&dyn std::any::Any; $value; $n]
+        [&$value as &dyn std::any::Any; $n]
     };
     ( $( $value:expr ),+ $(,)? ) => {
-        ary_t![&dyn std::any::Any; $($value),+]
+        [ $(&$value as &dyn std::any::Any),+ ]
     };
 }
 
 #[macro_export]
 macro_rules! ary_anybox {
-    () => { ary_t!(Box<dyn std::any::Any>) };
+    () => { [] as [Box<dyn std::any::Any>; 0] };
     ( $( $value:expr ),+ $(,)? ) => {
         [ $(Box::new($value) as Box<dyn std::any::Any>),+ ]
     };
