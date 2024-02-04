@@ -2,11 +2,18 @@
 
 [![Actions Status](https://github.com/kumavale/anygma/workflows/CI/badge.svg)](https://github.com/kumavale/anygma/actions)
 
-`anygma` is a TODO...
+`anygma` makes it easy to define arrays containing different types.
 
 ## Examples
 
-TODO...
+```rust
+use anygma::ary_anyref;
+
+let a = ary_anyref![0, 'a', "str"];
+assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
+assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
+assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
+```
 
 ## Contributing
 

@@ -1,3 +1,40 @@
+//! This crate makes it easy to define arrays containing different types.
+//!
+//! ## Examples
+//!
+//! ```
+//! use anygma::ary_anyref;
+//!
+//! let a = ary_anyref![0, 'a', "str"];
+//! assert_eq!(a[0].downcast_ref::<i32>(), Some(&0));
+//! assert_eq!(a[1].downcast_ref::<char>(), Some(&'a'));
+//! assert_eq!(a[2].downcast_ref::<&str>(), Some(&"str"));
+//! ```
+//!
+//! ```
+//! use anygma::ary_tref;
+//!
+//! let a = ary_tref![&dyn std::fmt::Debug; 0, 'a', "str"];
+//! println!("{:?}", a);
+//! ```
+//!
+//! You can also create your own new macros using [ary_tref!]
+//!
+//! ```
+//! # use anygma::ary_tref;
+//! macro_rules! ary_debug {
+//!     ( $( $value:expr ),+ $(,)? ) => {
+//!         ary_tref![&dyn std::fmt::Debug; $($value),+]
+//!     };
+//! }
+//!
+//! let a = ary_debug![0, 'a', "str"];
+//! println!("{:?}", a);
+//! ```
+
+/// This macro is a convenient way to create arrays of trait objects that you specify.
+///
+/// You can define an array of type `[&dyn T]`.
 #[macro_export]
 macro_rules! ary_tref {
     ( $ty:ty ) => { [] as [$ty; 0] };
@@ -9,6 +46,9 @@ macro_rules! ary_tref {
     };
 }
 
+/// This macro is a convenient way to create arrays of trait objects that you specify.
+///
+/// You can define an array of type `[Box<dyn T>]`.
 #[macro_export]
 macro_rules! ary_tbox {
     ( $ty:ty ) => { [] as [Box<$ty>; 0] };
@@ -20,6 +60,9 @@ macro_rules! ary_tbox {
     };
 }
 
+/// This macro is a convenient way to create an array of Any trait objects.
+///
+/// You can define an array of type `[&dyn std::any::Any]`.
 #[macro_export]
 macro_rules! ary_anyref {
     () => { [] as [&dyn std::any::Any; 0] };
@@ -31,6 +74,9 @@ macro_rules! ary_anyref {
     };
 }
 
+/// This macro is a convenient way to create an array of Any trait objects.
+///
+/// You can define an array of type `[Box<dyn std::any::Any>]`.
 #[macro_export]
 macro_rules! ary_anybox {
     () => { [] as [Box<dyn std::any::Any>; 0] };
