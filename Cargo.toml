@@ -2,6 +2,12 @@
 name = "anygma"
 version = "0.1.0"
 edition = "2021"
+authors = ["kumavale"]
+description = "anygma makes it easy to define arrays containing different types."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/kumavale/anygma"
+readme = "README.md"
+keywords = ["macro", "utility"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
